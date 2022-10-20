@@ -1,0 +1,36 @@
+# Run linting actions to check for trailing whitespace and
+# commit message issues.
+name: Linter/commit check
+
+on:
+  push:
+
+jobs:
+  linters:
+    runs-on: [self-hosted]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Check for trailing whitespace
+      run: >
+        ! grep --exclude=*.patch --exclude-dir=.git/ -GrIn "[[:blank:]]\+$" |
+        awk -F ':' '{ print "::error::"$1":"$2":"length($0) - length($1) - length($2) - 2
+        ": Trailing whitespace"}' |
+        grep .
+      shell: bash
+      if: always()
+
+    - name: checkout ci-libs
+      uses: actions/checkout@v3
+      with:
+        repository: Corigine/ci-libs
+        token: ${{ secrets.GHUB_TOKEN }}
+        path: ci-libs
+      if: always()
+
+    - name: Check commit message format
+      uses: ./ci-libs/github_actions/linting/commit_check
+      if: always()
+
