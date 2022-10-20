@@ -1,0 +1,33 @@
+# Run linting actions to check for trailing whitespace and
+# commit message issues.
+name: Linter/commit check
+
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  linters:
+    runs-on: [self-hosted]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Check for codespell and git log
+      run: |
+        ./github/deps/upstream_pre.check.sh
+      shell: bash
+      if: always()
+
+    # - name: checkout ci-libs
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Corigine/ci-libs
+    #     token: ${{ secrets.GHUB_TOKEN }}
+    #     path: ci-libs
+    #   if: always()
+
+    # - name: Check commit message format
+    #   uses: ./ci-libs/github_actions/linting/commit_check
+    #   if: always()
+
