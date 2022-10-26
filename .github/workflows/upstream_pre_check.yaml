@@ -12,24 +12,3 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-
-    - name: checkout dts
-      uses: actions/checkout@v3
-      with:
-        repository: Corigine/dpdk-dts-private
-        token: ${{ secrets.GHUB_TOKEN }}
-        path: dts_ci_patch
-      if: always()
-
-    # - name: checkout ci-libs
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: Corigine/ci-libs
-    #     token: ${{ secrets.GHUB_TOKEN }}
-    #     path: ci-libs
-    #   if: always()
-
-    # - name: Check commit message format
-    #   uses: ./ci-libs/github_actions/linting/commit_check
-    #   if: always()
-
