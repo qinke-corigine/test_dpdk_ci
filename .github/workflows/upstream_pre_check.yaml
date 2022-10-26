@@ -7,16 +7,18 @@ on:
   workflow_dispatch:
 jobs:
   linters:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, ci_dpdk]
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Check for codespell and git log
-      run: |
-        ./github/deps/upstream_pre.check.sh
-      shell: bash
+    - name: checkout dts
+      uses: actions/checkout@v3
+      with:
+        repository: Corigine/dpdk-dts-private
+        token: ${{ secrets.GHUB_TOKEN }}
+        path: dts_ci_patch
       if: always()
 
     # - name: checkout ci-libs
